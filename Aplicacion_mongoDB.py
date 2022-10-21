@@ -134,25 +134,25 @@ def consulta_general():
     obj_PyMongo = PyMongo(variables)  # *********************************
     print(" == CONSULTA GENERAL ==")
     obj_PyMongo.conectar_mongodb()
-    print("CONSULTA GENERAL")
-    respuesta = obj_PyMongo.consultageneral_mongodb("estudiantes")
-    respuesta2 = obj_PyMongo.consultageneral_mongodb("kardex")
+    respuesta_1 = obj_PyMongo.consultageneral_mongodb("estudiantes")
+    respuesta_2 = obj_PyMongo.consultageneral_mongodb("kardex")
     obj_PyMongo.desconectar_mongodb()
     i = 0;
-    if respuesta["status"] and respuesta2["status"]:
-        for res1 in respuesta["resultado"]:
+    if respuesta_1["status"] and respuesta_2["status"]:
+        print("N_Control        Nombre               Promedio")
+        for res1 in respuesta_1["resultado"]:
             j=0
             prom = 0
             cont = 0
-            for res2 in respuesta2["resultado"]:
-                if respuesta["resultado"][i]["control"] == respuesta2["resultado"][j]["control"]:
-                    prom += respuesta2["resultado"][j]["calificacion"]
+            for res2 in respuesta_2["resultado"]:
+                if respuesta_1["resultado"][i]["control"] == respuesta_2["resultado"][j]["control"]:
+                    prom += respuesta_2["resultado"][j]["calificacion"]
                     cont += 1
                 j+=1
             if(cont>0):
                 prom = prom/cont
-            print("CONTROL: ", respuesta["resultado"][i]["control"], " NOMBRE: ", respuesta["resultado"][i]["nombre"], " PROMEDIO: ", prom)
-            i +=1
+            print(respuesta_1["resultado"][i]["control"], respuesta_1["resultado"][i]["nombre"], prom)
+            i+=1
 
 def eliminar():
     obj_PyMongo=PyMongo(variables)
@@ -165,7 +165,7 @@ def eliminar():
 
 
     if respuesta["status"]:
-        print("Estudiante eliminado")
+        print("Estudiante ha sido eliminado")
         obj_PyMongo.eliminar('estudiantes', filtro_buscar)
         obj_PyMongo.eliminar('kardex', filtro_buscar)
         obj_PyMongo.eliminar('usuarios', filtro_buscar)
